@@ -7,7 +7,7 @@ diode_pin_angle = 5;  // [0:15]
 // Amount the diode folds over
 diode_foldover = 4;
 // Overall thickness of PCB
-pcb_thickness = 4;  // [4:0.1:10]
+pcb_thickness = 5;  // [4:0.1:10]
 
 /* Switch Parameters */
 // Switch type
@@ -16,6 +16,9 @@ switch_type = "mx";  // [mx, choc]
 switch_orientation = "south";  // [north, south]
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
+
+//Whether to use the cutout for kailh hotswap sockets
+use_hotswap_socket = true;
 
 
 /* Stabilizer Parameters */

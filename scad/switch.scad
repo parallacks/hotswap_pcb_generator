@@ -1,5 +1,6 @@
 include <parameters.scad>
 include <utils.scad>
+include <kailh_socket.scad>
 
 
 module switch_socket(borders=[1,1,1,1], rotate_column=false) {
@@ -20,12 +21,18 @@ module switch_socket_base(borders=[1,1,1,1]) {
                 h_border_width, 
                 v_border_width
             );
+        translate([0, socket_size/2+h_border_width/2, 0])
+            cube([socket_size,h_border_width,pcb_thickness], center = true);        
     }
 }
 
 module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
+      
+
     if (switch_type == "mx") {
-        if (use_folded_contact) {
+        if(use_hotswap_socket){
+            kailh_socket_cutout(borders, rotate_column);
+        } else if (use_folded_contact) {
             mx_improved_socket_cutout(borders, rotate_column);
         } else {
             mx_socket_cutout(borders, rotate_column);
@@ -33,10 +40,56 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     } else if (switch_type == "choc") {
         choc_socket_cutout(borders, rotate_column);
     } else {
-        assert(false, "switch_type is invalid");
+       assert(false, "switch_type is invalid");
     }
 }
 
+module kailh_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
+    render() translate([h_unit/2, -v_unit/2, 0]) rotate([0,0,switch_rotation])
+        intersection() {
+            union() {
+                // Central pin
+                translate([0,0,pcb_thickness/2-socket_depth])
+                    cylinder(h=pcb_thickness+1,r=2.1);
+                // Side pins
+                for (x = [-4,4]) {
+                    translate([x*grid,0,pcb_thickness/2-socket_depth])
+                        cylinder(h=pcb_thickness+1,r=1.05);
+                }
+                // Wire Channels
+                // Kailh Socket
+                    kailh_socket_cut();
+                // Row wire
+                translate([0,7.4*grid,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
+                    cylinder(h=row_cutout_length,d=wire_diameter,center=true);
+                // Column wire
+                translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
+                    rotate([90,0,rotate_column?90:0])
+                        translate([0,0,-4*grid])
+                        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
+                // Diode cathode cutout
+                translate([3*grid,-4*grid,0])
+                    cylinder(h=pcb_thickness+1,r=.7,center=true);
+                // Diode Channel
+                translate([-2,-4*grid,pcb_thickness/2])
+                    cube([10*grid,1,2],center=true);
+                translate([-1*grid-.5,-4*grid,pcb_thickness/2])
+                    cube([4*grid,2,3],center=true);
+            }
+        }
+        
+}
+module kailh_socket_cut(borders=[1,1,1,1], rotate_column=false){
+    
+    translate([-2, 3, 1])
+        union(){
+            translate([-4,-2,-1.55])
+            kailh_socket_print();
+            translate([-4,-2,0])
+            kailh_socket_print();
+        }
+    
+}
 module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
