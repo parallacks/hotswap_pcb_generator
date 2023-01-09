@@ -63,18 +63,37 @@ module kailh_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate([0,7.4*grid,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
                     cylinder(h=row_cutout_length,d=wire_diameter,center=true);
                 // Column wire
-                translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
+                translate([4*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
                     rotate([90,0,rotate_column?90:0])
                         translate([0,0,-4*grid])
                         cylinder(h=col_cutout_length,d=wire_diameter,center=true);
                 // Diode cathode cutout
-                translate([3*grid,-4*grid,0])
+                translate([4*grid,-2.5*grid,0])
                     cylinder(h=pcb_thickness+1,r=.7,center=true);
                 // Diode Channel
-                translate([-2,-4*grid,pcb_thickness/2])
-                    cube([10*grid,1,2],center=true);
-                translate([-1*grid-.5,-4*grid,pcb_thickness/2])
-                    cube([4*grid,2,3],center=true);
+//                translate([-1,-2.5*grid,pcb_thickness/2])
+//                    cube([10*grid,1,2],center=true);
+//                translate([-1*grid-.5,-2.5*grid,pcb_thickness/2])
+//                    cube([4*grid,2,3],center=true);
+                
+                // LED leg cutout
+//                translate([1*grid,-4*grid,0])
+//                    cylinder(h=pcb_thickness+1,r=.7,center=true);
+//                translate([-1*grid,-4*grid,0])
+//                    cylinder(h=pcb_thickness+1,r=.7,center=true);
+                // LED Ground wire
+//                translate([1*grid,-3*grid,-(pcb_thickness/2-wire_diameter/3)]) 
+//                    rotate([90,0,rotate_column?90:0])
+//                        translate([0,0,-2*grid])
+//                        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
+                // LED VCC wire
+//                translate([-4*grid,-3*grid,-(pcb_thickness/2-wire_diameter/3)]) 
+//                    rotate([90,0,rotate_column?90:0])
+//                       translate([0,0,-2*grid])
+//                        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
+                // Resistor cutout
+//                translate([-1*grid-.5,-2.5*grid,-pcb_thickness/2])
+//                    cube([4*grid,2,3],center=true);
             }
         }
         
@@ -87,9 +106,12 @@ module kailh_socket_cut(borders=[1,1,1,1], rotate_column=false){
             kailh_socket_print();
             translate([-4,-2,0])
             kailh_socket_print();
+            translate([7,1,-1.55])
+                cube([5,6,4]);
         }
     
 }
+
 module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
