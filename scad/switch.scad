@@ -95,10 +95,11 @@ module kailh_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate([-1*grid-.5,0,-pcb_thickness/2])
                     rotate([0,0,90])
                         cube([4*grid,2,3],center=true);
-                translate([-1*grid-.5,-1,-pcb_thickness/2]){
-                    //cube([8*grid,1,1],center=true);
+                translate([-1*grid-.5,-.5,-pcb_thickness/2]){
                     rotate([0,0,90])
                         cube([8*grid,1,2],center=true);
+                translate([-2*grid-.5,5,-pcb_thickness/4])
+                    cube([6*grid,1,4],center=true);
                 }
             }
         }
